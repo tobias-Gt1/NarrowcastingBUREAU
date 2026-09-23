@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <!-- figma:head-start -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Narrowcasting — Grafisch Lyceum Utrecht</title>
+    <!-- figma:head-end -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- figma:body-start -->
+    <div id="root">
+      <!-- DISPLAY -->
+      <div id="display">
+        <a class="admin-link" href="#admin">beheer</a>
+        <div class="d-header">
+          <div>
+            <div class="d-school">Grafisch Lyceum Utrecht</div>
+            <div class="d-sub">Koningin Wilhelminalaan · 3WDV1 &amp; 3WDV2</div>
+          </div>
+          <div class="d-clock">
+            <div class="d-time" id="clock">--:--</div>
+            <div class="d-date" id="dateline">—</div>
+          </div>
+        </div>
+        <div class="d-body">
+          <div id="screen-bus"></div>
+          <div id="screen-rooster" style="display: none"></div>
+          <div id="screen-weer" style="display: none">
+            <div class="weer-main">
+              <div class="weer-label">Utrecht · Nu</div>
+              <div class="weer-big">
+                <div class="weer-icon">⛅</div>
+                <div>
+                  <div class="weer-temp">14°</div>
+                  <div class="weer-desc">Licht bewolkt</div>
+                </div>
+              </div>
+              <div class="weer-stats">
+                <span>💧 10%</span><span>💨 18 km/h ZW</span
+                ><span>🌡 Voelt als 12°</span>
+              </div>
+            </div>
+            <div class="weer-side">
+              <div class="weer-label">Verwachting</div>
+              <hr class="bus-divider" />
+              <div id="uur-list"></div>
+            </div>
+          </div>
+          <div id="screen-berichten" style="display: none">
+            <div class="b-header" id="b-header">Mededelingen</div>
+            <div class="b-list" id="b-list"></div>
+          </div>
+        </div>
+        <div class="d-dots" id="dots"></div>
+      </div>
+
+      <!-- ADMIN -->
+      <div id="admin">
+        <div class="a-header">
+          <div class="a-logo">
+            <div class="a-badge">GLU</div>
+            <div>
+              <div class="a-title">Narrowcasting Beheer</div>
+              <div class="a-sub">Grafisch Lyceum Utrecht</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span class="a-saved" id="a-saved">✓ Opgeslagen</span>
+            <a class="a-back" href="#display">← Naar display</a>
+          </div>
+        </div>
+
+        <div class="a-tabs">
+          <button class="a-tab active" onclick="switchTab('berichten')">
+            📢 Mededelingen
+          </button>
+          <button class="a-tab" onclick="switchTab('rooster')">
+            📅 Rooster
+          </button>
+          <button class="a-tab" onclick="switchTab('bus')">🚌 Bus</button>
+        </div>
+
+        <div class="a-content">
+          <!-- BERICHTEN PANEL -->
+          <div class="a-panel active" id="panel-berichten">
+            <div style="display: flex; justify-content: flex-end">
+              <button class="btn btn-primary" onclick="openBerichtForm()">
+                + Nieuw bericht
+              </button>
+            </div>
+
+            <div class="card" id="bericht-form-card" style="display: none">
+              <div class="card-head">Bericht</div>
+              <div class="card-body">
+                <div class="form-grid">
+                  <div>
+                    <label class="f-label">Docent / auteur</label>
+                    <input id="b-author" placeholder="bijv. Dhr. Verhoef" />
+                  </div>
+                  <div>
+                    <label class="f-label">Prioriteit</label>
+                    <select id="b-prio">
+                      <option value="urgent">🔴 Dringend</option>
+                      <option value="reminder">🟡 Herinnering</option>
+                      <option value="info" selected>🔵 Info</option>
+                    </select>
+                  </div>
+                  <div class="full">
+                    <label class="f-label">Titel</label>
+                    <input id="b-title" placeholder="Korte, duidelijke titel" />
+                  </div>
+                  <div class="full">
+                    <label class="f-label">Berichttekst</label>
+                    <textarea
+                      id="b-body"
+                      rows="3"
+                      placeholder="Volledige mededeling..."
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label class="f-label">Geldig tot</label>
+                    <input id="b-expires" placeholder="bijv. vr 27 sept" />
+                  </div>
+                  <div>
+                    <label class="f-label">Klassen</label>
+                    <div style="display: flex; gap: 8px; margin-top: 4px">
+                      <button
+                        class="klas-toggle"
+                        id="tog-3WDV1"
+                        onclick="toggleKlas('3WDV1')"
+                      >
+                        3WDV1
+                      </button>
+                      <button
+                        class="klas-toggle wdv2"
+                        id="tog-3WDV2"
+                        onclick="toggleKlas('3WDV2')"
+                      >
+                        3WDV2
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 16px">
+                  <button class="btn btn-primary" onclick="saveBericht()">
+                    Opslaan
+                  </button>
+                  <button class="btn btn-ghost" onclick="cancelBericht()">
+                    Annuleren
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div id="bericht-list"></div>
+          </div>
+
+          <!-- ROOSTER PANEL -->
+          <div class="a-panel" id="panel-rooster">
+            <div style="display: flex; gap: 8px">
+              <button
+                class="klas-toggle on"
+                id="rtab-3WDV1"
+                onclick="switchRoosterKlas('3WDV1')"
+              >
+                3WDV1
+              </button>
+              <button
+                class="klas-toggle wdv2"
+                id="rtab-3WDV2"
+                onclick="switchRoosterKlas('3WDV2')"
+              >
+                3WDV2
+              </button>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 300px;
+                gap: 20px;
+                align-items: start;
+              "
+            >
+              <div id="rooster-list"></div>
+              <div class="card">
+                <div class="card-head" id="les-form-title">Les toevoegen</div>
+                <div class="card-body">
+                  <div style="display: flex; flex-direction: column; gap: 12px">
+                    <div>
+                      <label class="f-label">Tijdblok</label>
+                      <input id="l-time" placeholder="08:30–10:00" />
+                    </div>
+                    <div>
+                      <label class="f-label">Vak</label>
+                      <input id="l-subject" placeholder="bijv. Webdesign" />
+                    </div>
+                    <div>
+                      <label class="f-label">Lokaal</label>
+                      <input id="l-room" placeholder="bijv. ICT-3" />
+                    </div>
+                    <div>
+                      <label class="f-label">Docent</label>
+                      <input id="l-teacher" placeholder="bijv. Dhr. Verhoef" />
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 4px">
+                      <button class="btn btn-primary" onclick="saveLesson()">
+                        Opslaan
+                      </button>
+                      <button
+                        class="btn btn-ghost"
+                        id="l-cancel-btn"
+                        style="display: none"
+                        onclick="cancelLesson()"
+                      >
+                        Annuleren
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BUS PANEL -->
+          <div class="a-panel" id="panel-bus">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+              "
+              id="stop-tabs"
+            ></div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 280px;
+                gap: 20px;
+                align-items: start;
+              "
+            >
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 16px;
+                  "
+                  id="stop-name-row"
+                ></div>
+                <div id="dep-list"></div>
+              </div>
+              <div class="card">
+                <div class="card-head" id="dep-form-title">
+                  Vertrek toevoegen
+                </div>
+                <div class="card-body">
+                  <div style="display: flex; flex-direction: column; gap: 12px">
+                    <div>
+                      <label class="f-label">Lijnnummer</label>
+                      <input id="d-line" placeholder="bijv. 2" />
+                    </div>
+                    <div>
+                      <label class="f-label">Bestemming</label>
+                      <input id="d-dest" placeholder="bijv. Utrecht CS" />
+                    </div>
+                    <div>
+                      <label class="f-label">Minuten</label>
+                      <input id="d-min" type="number" placeholder="5" min="0" />
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 4px">
+                      <button class="btn btn-primary" onclick="saveDep()">
+                        Opslaan
+                      </button>
+                      <button
+                        class="btn btn-ghost"
+                        id="d-cancel-btn"
+                        style="display: none"
+                        onclick="cancelDep()"
+                      >
+                        Annuleren
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #root -->
+    <!-- figma:body-end -->
+
+    <script src="js/data.js"></script>
+    <script src="js/display.js"></script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>

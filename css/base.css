@@ -1,0 +1,28 @@
+*,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #07090f;
+        --surface: #0e1520;
+        --border: #1c2b40;
+        --text: #ddeaf8;
+        --sub: #3d5570;
+        --accent: #00ccff;
+        --yellow: #f5a623;
+        --green: #3dd68c;
+        --red: #f04444;
+      }
+
+      html,
+      body {
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        overflow: hidden;
+      }
